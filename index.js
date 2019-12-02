@@ -1,7 +1,6 @@
 var debug = require('debug')('simple-peer')
 var getBrowserRTC = require('get-browser-rtc')
-var randombytes = require('randombytes')
-var stream = require('readable-stream')
+var stream = require('react-native-stream')
 var queueMicrotask = require('queue-microtask') // TODO: remove when Node 10 is not supported
 
 var MAX_BUFFERED_AMOUNT = 64 * 1024
@@ -36,7 +35,9 @@ class Peer extends stream.Duplex {
 
     super(opts)
 
-    this._id = randombytes(4).toString('hex').slice(0, 7)
+    var randombytes = opts.randombytes || require('randombytes')
+    
+    this._id = opts.id || randombytes(4).toString('hex').slice(0, 7)
     this._debug('new peer %o', opts)
 
     this.channelName = opts.initiator
